@@ -1,3 +1,7 @@
+# Tabletop.ts
+/build
+/static/_dist_
+
 # Logs
 logs
 *.log
