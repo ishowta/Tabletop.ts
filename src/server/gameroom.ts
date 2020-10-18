@@ -20,9 +20,19 @@ export class GameRoom extends Room<State> {
     console.log(`New player id:${client.sessionId}, index:${newIndex}`)
   }
   onMessage(client: Client, message: Message): void {
-    this.broadcast(message, {
-      /*except: client*/
-    })
+    if (message.type === 'name') {
+      // eslint-disable-next-line  @typescript-eslint/no-unsafe-member-access
+      this.state.players[client.sessionId].name = message.name
+    } else {
+      if (message.type === 'init') {
+        const rs = Math.random().toString(32).substring(2)
+        this.broadcast({ rs: rs, ...message })
+      } else {
+        this.broadcast(message, {
+          /*except: client*/
+        })
+      }
+    }
   }
   onLeave(client: Client): void {
     console.log(

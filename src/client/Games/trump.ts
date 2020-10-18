@@ -20,12 +20,14 @@ export class Trump extends Game {
               500,
               500,
               `${type}${i + 1}`,
-              0xeeeeee
+              0xeeeeee,
+              false,
+              ['♥', '♦'].includes(type) ? '#f00' : '#000'
             )
         )
       ),
+      new Card(this.scene, 52, 500, 500, `JK`, 0xeeeeee),
       new Card(this.scene, 53, 500, 500, `JK`, 0xeeeeee),
-      //new Card(this.scene, 54, 500, 500, `JK`, 0xeeeeee),
     ]
   }
 }

@@ -13,6 +13,8 @@ import _, { LoDashStatic } from 'lodash'
 export default class Tabletop extends Phaser.Scene {
   room: Room<State> | null = null
   components: Component[] = []
+  name: string
+  userNameLabel: Phaser.GameObjects.Text | null = null
   mask: Record<string, Phaser.GameObjects.Container> = {}
   _: LoDashStatic = _
   MASK = [
@@ -31,6 +33,9 @@ export default class Tabletop extends Phaser.Scene {
 
   constructor() {
     super('tabletop')
+    const urlParams = new URLSearchParams(window.location.search)
+    const name = urlParams.get('name')
+    this.name = name == null ? 'Player' : name
   }
 
   preload(): void {}
@@ -45,6 +50,9 @@ export default class Tabletop extends Phaser.Scene {
         seedrandom(room.id, { global: true })
         this._ = _.runInContext()
         console.log(room.sessionId, 'joined', room.name)
+
+        // 名前を送る
+        room.send({ type: 'name', name: this.name })
 
         room.onMessage(this.processingMessage)
         room.state.players.onAdd = (player: Player, sessionId: string) => {
@@ -61,16 +69,27 @@ export default class Tabletop extends Phaser.Scene {
           const userName = this.add.text(
             width / 2 - 80,
             height / 2 - 16,
-            sessionId,
+            'Player',
             {
               fontFamily: 'Arial',
               fontSize: 32,
               color: '#000000',
             }
           )
+          this.userNameLabel = userName
           this.mask[sessionId] = this.add
             .container(x, y, [mask, userName])
             .setDepth(75)
+          if (this.userNameLabel != null) {
+            this.userNameLabel.text =
+              sessionId === room.sessionId ? this.name : player.name
+          }
+        }
+        room.state.players.onChange = (player: Player, sessionId: string) => {
+          if (this.userNameLabel != null) {
+            this.userNameLabel.text =
+              sessionId === room.sessionId ? this.name : player.name
+          }
         }
         room.state.players.onRemove = (player: Player, sessionId: string) => {
           console.log('onremove', sessionId)
@@ -106,7 +125,7 @@ export default class Tabletop extends Phaser.Scene {
     const keys: Array<GameType> = Object.keys(GAME_LIST) as Array<GameType>
     keys.forEach((gameName, i) => {
       this.add
-        .text(i * 200, 0, gameName, {
+        .text(i * 200 + 800, 0, gameName, {
           fontFamily: 'Arial',
           fill: '#000',
           fontSize: 60,
@@ -123,11 +142,19 @@ export default class Tabletop extends Phaser.Scene {
   }
 
   processingMessage = (message: Message): void => {
-    console.log('Process', message)
+    // console.log('Process', message)
     switch (message.type) {
+      case 'name':
+        break
       case 'init': {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/consistent-type-assertions,@typescript-eslint/no-explicit-any
+        seedrandom((message as any).rs, { global: true })
+        this._ = _.runInContext()
         // Reset prev game
-        this.components.forEach((c) => c.obj.removeAll())
+        this.components.forEach((c) => {
+          c.obj.removeAll()
+          c.obj.destroy()
+        })
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         const game: Game = new GAME_LIST[message.game](this, this.room)
         this.components = game.init()

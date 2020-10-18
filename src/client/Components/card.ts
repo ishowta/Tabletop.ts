@@ -13,14 +13,15 @@ export class Card extends Component {
     y: number,
     text: string,
     color: number,
-    isReversed = false
+    isReversed = false,
+    textColor = '#000000'
   ) {
     super(scene, index, x, y, 50, 80)
     this.base = scene.add.rectangle(0, 0, 50, 80, color)
-    this.text = scene.add.text(-25, -16, text, {
+    this.text = scene.add.text(-23, -16, text, {
       fontFamily: 'Arial',
-      fontSize: 32,
-      color: '#000000',
+      fontSize: 29,
+      color: textColor,
     })
     this.back = scene.add.rectangle(0, 0, 50, 80, 0xcb904d)
     this.back.visible = isReversed

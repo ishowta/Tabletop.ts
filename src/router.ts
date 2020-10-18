@@ -53,7 +53,7 @@ gameServer.onShutdown(function () {
 gameServer
   .listen(port)
   .then(() => {
-    console.log(`Listening on http://localhost:${port}`)
+    console.log(`Listening on http://tabletop.temp-iwata.tokyo`)
   })
   .catch(() => {
     console.log(`Cannot listen port ${port}`)

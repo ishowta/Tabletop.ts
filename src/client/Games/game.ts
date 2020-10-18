@@ -25,13 +25,16 @@ export abstract class Game {
     spot: { type: 'hand'; index: number } | { type: 'board' },
     components: Component[]
   ) {
-    const [spotX, spotY, spotWidth, spotHeight] =
+    const margin = 5
+    let [spotX, spotY, spotWidth, spotHeight] =
       spot.type === 'hand' ? this.scene.MASK[spot.index] : this.scene.BOARD
+    spotX += margin
+    spotY += margin
 
     // 左上から整列させる。入り切らない場合は重ねる
     const cur = { x: spotX, y: spotY }
     let eachMaxHeight = 0
-    const margin = 5
+
     for (const c of components) {
       if (cur.x + c.obj.width > spotX + spotWidth) {
         cur.x = spotX

@@ -2,6 +2,7 @@ import { Schema, MapSchema, type } from '@colyseus/schema'
 
 export class Player extends Schema {
   @type('number') index: number
+  @type('string') name = 'User'
   constructor(index: number) {
     super()
     this.index = index
