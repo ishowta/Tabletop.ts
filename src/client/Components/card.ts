@@ -15,21 +15,21 @@ export class Card extends Component {
     color: number,
     isReversed = false
   ) {
-    super(scene, index, x, y, 70, 120)
-    this.base = scene.add.rectangle(0, 0, 70, 120, color)
+    super(scene, index, x, y, 50, 80)
+    this.base = scene.add.rectangle(0, 0, 50, 80, color)
     this.text = scene.add.text(-25, -16, text, {
       fontFamily: 'Arial',
       fontSize: 32,
       color: '#000000',
     })
-    this.back = scene.add.rectangle(0, 0, 70, 120, 0x000000)
+    this.back = scene.add.rectangle(0, 0, 50, 80, 0xcb904d)
     this.back.visible = isReversed
     this.obj.add([this.base, this.text, this.back])
   }
   /**
    * Flip
    */
-  rightClick(): void {
+  click(): void {
     this.back.visible = !this.back.visible
   }
 }

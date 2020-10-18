@@ -1,14 +1,15 @@
 import 'phaser'
 import * as Colyseus from 'colyseus.js'
 import Tabletop from './tabletop'
+import { WIDTH, HEIGHT } from './const'
 
 const port = Number(process.env.PORT)
 
 const config = {
   type: Phaser.AUTO,
-  backgroundColor: '#000000',
-  width: 1920,
-  height: 1080,
+  backgroundColor: '#207720',
+  width: WIDTH,
+  height: HEIGHT,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

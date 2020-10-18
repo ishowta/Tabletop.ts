@@ -41,8 +41,8 @@ if (isDev) {
     })
   }
   build()
-  watch('./src/client', { recursive: true }, function (evt, name) {
-    console.log('%s changed.', name)
+  watch('./src/client', { recursive: true }, function (_evt, _name) {
+    // console.log('%s changed.', name)
     build()
   })
 }

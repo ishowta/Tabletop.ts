@@ -1,18 +1,31 @@
-import _ from 'lodash'
 import { Game } from './game'
 import { Card } from '../Components/card'
-import Tabletop from '../tabletop'
 import { Component } from '../Components/component'
 
 export class Trump extends Game {
-  init(scene: Tabletop): Component[] {
+  init(): Component[] {
+    const cards = this.buildTrump()
+    const cardsShuffled = this.scene._.shuffle(cards)
+    this.distribute(cardsShuffled)
+    return cards
+  }
+  buildTrump(): Card[] {
     return [
-      ..._.range(0, 14).flatMap((i) =>
+      ...this.scene._.range(0, 13).flatMap((i) =>
         ['♥', '♠', '♦', '♣'].map(
           (type, j) =>
-            new Card(scene, i * 4 + j, 500, 500, `${type}${i}`, 0x00ff00)
+            new Card(
+              this.scene,
+              i * 4 + j,
+              500,
+              500,
+              `${type}${i + 1}`,
+              0xeeeeee
+            )
         )
       ),
+      new Card(this.scene, 53, 500, 500, `JK`, 0xeeeeee),
+      //new Card(this.scene, 54, 500, 500, `JK`, 0xeeeeee),
     ]
   }
 }

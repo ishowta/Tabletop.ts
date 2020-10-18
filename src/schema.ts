@@ -9,5 +9,6 @@ export class Player extends Schema {
 }
 
 export class State extends Schema {
+  @type('number') count = 0
   @type({ map: Player }) players = new MapSchema<Player>()
 }
