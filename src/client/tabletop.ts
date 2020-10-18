@@ -14,6 +14,7 @@ export default class Tabletop extends Phaser.Scene {
   room: Room<State> | null = null
   components: Component[] = []
   name: string
+  cursors: Record<string, Phaser.GameObjects.Container | null> = {}
   userNameLabel: Phaser.GameObjects.Text | null = null
   mask: Record<string, Phaser.GameObjects.Container> = {}
   _: LoDashStatic = _
@@ -41,6 +42,7 @@ export default class Tabletop extends Phaser.Scene {
   preload(): void {}
 
   create(): void {
+    document.body.style.cursor = 'none'
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const g = this.game as TabletopTs
     g.server
@@ -98,6 +100,18 @@ export default class Tabletop extends Phaser.Scene {
           delete this.mask[sessionId]
         }
 
+        // cursor
+        this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+          const mes = {
+            type: 'cursor' as const,
+            id: room.sessionId,
+            x: pointer.x,
+            y: pointer.y,
+          }
+          this.processingMessage(mes)
+          room.send(mes)
+        })
+
         this.waitServer()
       })
       .catch((e) => {
@@ -146,6 +160,31 @@ export default class Tabletop extends Phaser.Scene {
     switch (message.type) {
       case 'name':
         break
+      case 'cursor':
+        if (this.cursors[message.id] == null) {
+          const cur = this.add.text(0, 0, '👆', {
+            fontFamily: 'Arial',
+            fontSize: 50,
+            color: '#000000',
+          })
+          // eslint-disable-next-line  @typescript-eslint/no-unsafe-member-access
+          const curName = this.add.text(
+            50,
+            20,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            this.room?.state.players[message.id].name,
+            {
+              fontFamily: 'Arial',
+              fontSize: 33,
+              color: '#000000',
+            }
+          )
+          this.cursors[message.id] = this.add
+            .container(0, 0, [cur, curName])
+            .setDepth(200)
+        }
+        this.cursors[message.id]?.setPosition(message.x - 25, message.y)
+        break
       case 'init': {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/consistent-type-assertions,@typescript-eslint/no-explicit-any
         seedrandom((message as any).rs, { global: true })
@@ -172,6 +211,6 @@ export default class Tabletop extends Phaser.Scene {
   send(message: Message): void {
     console.log('Send', message)
     this.room?.send(message)
-    //this.processingMessage(message)
+    if (message.type === 'move') this.processingMessage(message)
   }
 }

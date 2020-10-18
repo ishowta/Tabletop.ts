@@ -26,8 +26,8 @@ export class Trump extends Game {
             )
         )
       ),
-      new Card(this.scene, 52, 500, 500, `JK`, 0xeeeeee),
-      new Card(this.scene, 53, 500, 500, `JK`, 0xeeeeee),
+      new Card(this.scene, 52, 500, 500, `🃏`, 0xeeeeee, false, '#000', 50),
+      new Card(this.scene, 53, 500, 500, `🃏`, 0xeeeeee, false, '#000', 50),
     ]
   }
 }

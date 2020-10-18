@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
-    "start": "export NODE_ENV=development && export PORT=80 && ts-node-dev --respawn ./src/router.ts",
-    "build": "tsc --outDir ./build && yarn esbuild ./src/client/index.ts --bundle --platform=browser --define:process.env.PORT=80 --outfile=./static/_dist_/dev.js && cp -r static build/static",
-    "prod": "export NODE_ENV=production && export PORT=80 && node build/router.js",
+    "start": "export NODE_ENV=development && export PORT=8571 && ts-node-dev --respawn ./src/router.ts",
+    "build": "tsc --outDir ./build && yarn esbuild ./src/client/index.ts --bundle --platform=browser --define:process.env.PORT=8571 --outfile=./static/_dist_/dev.js && cp -r static build/static",
+    "prod": "export NODE_ENV=production && export PORT=8571 && node build/router.js",
     "lint": "eslint './src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix"
   },
@@ -45,7 +45,7 @@
     }
   },
   "lint-staged": {
-    "./src/**/*.{js,jsx,ts,tsx}": [
+    "./src/**/*.{js,ts}": [
       "yarn eslint --max-warnings=0 --fix"
     ]
   }

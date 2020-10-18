@@ -20,7 +20,11 @@ export class GameRoom extends Room<State> {
     console.log(`New player id:${client.sessionId}, index:${newIndex}`)
   }
   onMessage(client: Client, message: Message): void {
-    if (message.type === 'name') {
+    if (message.type === 'cursor' || message.type === 'move') {
+      this.broadcast(message, {
+        except: client,
+      })
+    } else if (message.type === 'name') {
       // eslint-disable-next-line  @typescript-eslint/no-unsafe-member-access
       this.state.players[client.sessionId].name = message.name
     } else {

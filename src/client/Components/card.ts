@@ -14,13 +14,14 @@ export class Card extends Component {
     text: string,
     color: number,
     isReversed = false,
-    textColor = '#000000'
+    textColor = '#000000',
+    fontSize = 29
   ) {
     super(scene, index, x, y, 50, 80)
     this.base = scene.add.rectangle(0, 0, 50, 80, color)
     this.text = scene.add.text(-23, -16, text, {
       fontFamily: 'Arial',
-      fontSize: 29,
+      fontSize: fontSize,
       color: textColor,
     })
     this.back = scene.add.rectangle(0, 0, 50, 80, 0xcb904d)
