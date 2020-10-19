@@ -3,14 +3,21 @@ import { Card } from '../Components/card'
 import { Component } from '../Components/component'
 import _ from 'lodash'
 
-export class Trump extends Game {
+export class PlayingCard extends Game {
   create = (): Component[] => {
-    let cards = this.buildTrump()
+    // Build cards
+    let cards = this.buildPlayingCard()
+
+    // Shuffle cards
     cards = this.scene._.shuffle(cards)
+
+    // Distribute cards
     this.distribute(cards)
+
     return cards
   }
-  buildTrump = (): Card[] => [
+
+  buildPlayingCard = (): Card[] => [
     ..._.range(0, 13).flatMap(i =>
       ['♥', '♠', '♦', '♣'].map(
         type =>
