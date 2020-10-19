@@ -1,21 +1,23 @@
 import { GameObjects } from 'phaser'
-import Tabletop from '../tabletop'
+import Tabletop from '../gamescene'
 
 export abstract class Component {
   x: number
   y: number
   obj: GameObjects.Container
+  index: number | null
   private inPointerDown = false
   constructor(
     scene: Tabletop,
-    index: number,
-    x: number,
-    y: number,
     width: number,
-    height: number
+    height: number,
+    x = 0,
+    y = 0,
+    index: number | null = -1
   ) {
     this.x = x
     this.y = y
+    this.index = index
     this.obj = scene.add.container(x, y)
     this.obj.depth = 50
     this.obj.setSize(width, height)
@@ -24,10 +26,11 @@ export abstract class Component {
     this.obj.on(
       'drag',
       (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+        if (this.index == null) throw new Error('Components index is not set.')
         this.inPointerDown = false
         scene.send({
-          type: 'move',
-          index: index,
+          type: 'moveComponent',
+          index: this.index,
           x: dragX,
           y: dragY,
         })
@@ -37,11 +40,12 @@ export abstract class Component {
       this.inPointerDown = true
     })
     this.obj.on('pointerup', () => {
+      if (this.index == null) throw new Error('Components index is not set.')
       if (this.inPointerDown === false) return
       this.inPointerDown = false
       scene.send({
-        type: 'click',
-        index: index,
+        type: 'clickComponent',
+        index: this.index,
       })
     })
   }

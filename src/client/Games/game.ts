@@ -1,7 +1,9 @@
 import { Component } from '../Components/component'
-import Tabletop from '../tabletop'
+import Tabletop from '../gamescene'
 import { Room } from 'colyseus.js'
-import { State, Player } from '../../schema'
+import { State, GetAll } from '../../schema'
+import { MASK_SHAPE_LIST, BOARD_SHAPE } from '../../const'
+import _ from 'lodash'
 
 export abstract class Game {
   protected scene: Tabletop
@@ -12,9 +14,22 @@ export abstract class Game {
   }
   /**
    * ゲームを初期化する
-   * @param scene ゲームを起動するシーン
    */
-  abstract init(): Component[]
+  init(): Component[] {
+    let comps = this.create()
+
+    // インデックスをセットする
+    comps.forEach((comp, i) => (comp.index = i))
+
+    return comps
+  }
+  /**
+   * コンポーネントを生成する
+   */
+  abstract create(): Component[]
+
+  // ヘルパー関数
+
   /**
    * コンポーネントを並べる
    * @param scene 並べるシーン
@@ -27,7 +42,7 @@ export abstract class Game {
   ) {
     const margin = 5
     let [spotX, spotY, spotWidth, spotHeight] =
-      spot.type === 'hand' ? this.scene.MASK[spot.index] : this.scene.BOARD
+      spot.type === 'hand' ? MASK_SHAPE_LIST[spot.index] : BOARD_SHAPE
     spotX += margin
     spotY += margin
 
@@ -50,23 +65,20 @@ export abstract class Game {
       cur.x += c.obj.width + margin
     }
   }
+  /**
+   * コンポーネントを均等に配る
+   * @param components 配るコンポーネント
+   */
   protected distribute(components: Component[]) {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    let indexes = (Object.values(this.room.state.players) as Player[]).map(
-      (p) => p.index
-    )
-    let hands = this.scene._.chunk(
-      components,
-      Math.floor(components.length / this.room.state.count)
-    )
-    console.log(hands)
-    if (hands.length > this.room.state.count) {
-      const key = this.scene._.random(0, this.room.state.count - 1)
+    let indexes = GetAll(this.room.state.players).map((p) => p.index)
+    const count = indexes.length
+    let hands = _.chunk(components, Math.floor(components.length / count))
+    if (hands.length > count) {
+      const key = this.scene._.random(0, count - 1)
       hands[key] = hands[key].concat(hands[hands.length - 1])
       hands.pop()
     }
-    console.log(hands)
-    this.scene._.zip(hands, indexes).forEach(([hand, index]) => {
+    _.zip(hands, indexes).forEach(([hand, index]) => {
       if (hand !== undefined && index !== undefined)
         this.place({ type: 'hand', index: index }, hand)
     })

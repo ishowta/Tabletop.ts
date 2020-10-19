@@ -1,9 +1,7 @@
 import 'phaser'
 import * as Colyseus from 'colyseus.js'
-import Tabletop from './tabletop'
-import { WIDTH, HEIGHT } from './const'
-
-// const port = Number(process.env.PORT)
+import Tabletop from './gamescene'
+import { WIDTH, HEIGHT } from '../const'
 
 const config = {
   type: Phaser.AUTO,
@@ -18,11 +16,10 @@ const config = {
 }
 
 export class TabletopTs extends Phaser.Game {
-  public server: Colyseus.Client
-
+  public client: Colyseus.Client
   public constructor(conf: Phaser.Types.Core.GameConfig) {
     super(conf)
-    this.server = new Colyseus.Client(`ws://tabletop.temp-iwata.tokyo`)
+    this.client = new Colyseus.Client(SERVER_ADDRESS)
   }
 }
 

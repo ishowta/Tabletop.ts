@@ -1,6 +1,6 @@
 import { GameObjects } from 'phaser'
 import { Component } from './component'
-import Tabletop from '../tabletop'
+import Tabletop from '../gamescene'
 
 export class Card extends Component {
   private base: GameObjects.Rectangle
@@ -8,21 +8,21 @@ export class Card extends Component {
   private back: GameObjects.Rectangle
   constructor(
     scene: Tabletop,
-    index: number,
-    x: number,
-    y: number,
     text: string,
     color: number,
     isReversed = false,
-    textColor = '#000000',
-    fontSize = 29
+    fontColor = '#000000',
+    fontSize = 29,
+    x = 0,
+    y = 0,
+    index: number | null = null
   ) {
-    super(scene, index, x, y, 50, 80)
+    super(scene, 50, 80, x, y, index)
     this.base = scene.add.rectangle(0, 0, 50, 80, color)
     this.text = scene.add.text(-23, -16, text, {
       fontFamily: 'Arial',
       fontSize: fontSize,
-      color: textColor,
+      color: fontColor,
     })
     this.back = scene.add.rectangle(0, 0, 50, 80, 0xcb904d)
     this.back.visible = isReversed

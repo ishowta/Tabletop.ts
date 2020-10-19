@@ -7,54 +7,56 @@ import { monitor } from '@colyseus/monitor'
 import watch from 'node-watch'
 import { exec } from 'child_process'
 import { GameRoom } from './server/gameroom'
-const port = Number(process.env.PORT)
-const isDev = process.env.NODE_ENV === 'development'
-const app = express()
-const STATIC_PATH = isDev ? '../static' : './static'
-const DEV_STATIC_BUILD_COMMAND =
-  'yarn esbuild ./src/client/index.ts --bundle --platform=browser --define:process.env.PORT=8571 --outfile=./static/_dist_/dev.js'
 
+if (process.env.SERVER_ADDRESS == null || process.env.SERVER_PORT == null)
+  throw new Error('env not set')
+const SERVER_ADDRESS = process.env.SERVER_ADDRESS
+const SERVER_PORT = process.env.SERVER_PORT
+const ISDEV = process.env.NODE_ENV === 'development'
+const STATIC_PATH = '../static'
+const DEV_STATIC_BUILD_COMMAND = `yarn esbuild ./src/client/index.ts --bundle --platform=browser --define:SERVER_ADDRESS=\\"${SERVER_ADDRESS}\\" --outfile=./static/_dist_/dev.js`
+
+const app = express()
 app.use(cors())
 app.use(express.json())
 
 const gameServer = new Server({
   server: createServer(app),
   express: app,
-  pingInterval: 0,
 })
 
 gameServer.define('game', GameRoom)
 app.use('/', express.static(path.join(__dirname, STATIC_PATH)))
-if (isDev) app.use('/colyseus', monitor())
-
-if (isDev) {
-  const build = () => {
-    exec(DEV_STATIC_BUILD_COMMAND, (e, so, se) => {
-      if (e != null) {
-        console.log(`error: ${e.message}`)
-        return
-      }
-      if (se) {
-        console.log(`stderr: ${se}`)
-        return
-      }
-    })
-  }
-  build()
-  watch('./src/client', { recursive: true }, function (_evt, _name) {
-    // console.log('%s changed.', name)
-    build()
-  })
-}
-
+if (ISDEV) app.use('/colyseus', monitor())
 gameServer.onShutdown(function () {
   console.log(`game server is going down.`)
 })
 gameServer
-  .listen(port)
+  .listen(parseInt(SERVER_PORT))
   .then(() => {
-    console.log(`Listening on http://tabletop.temp-iwata.tokyo`)
+    console.log(`Listening on http://${SERVER_ADDRESS}`)
   })
-  .catch(() => {
-    console.log(`Cannot listen port ${port}`)
+  .catch((e) => {
+    console.log(`Cannot listen.`, e)
   })
+
+const build = () => {
+  exec(DEV_STATIC_BUILD_COMMAND, (error, _stdout, stderror) => {
+    if (error != null) {
+      console.log(`error: ${error.message}`)
+      return
+    }
+    if (stderror) {
+      console.log(`stderr: ${stderror}`)
+      return
+    }
+  })
+}
+build()
+if (ISDEV) {
+  // Hot reload
+  watch('./src/client', { recursive: true }, function (_evt, _name) {
+    console.log(`${_name != null ? _name : ''} changed.`)
+    build()
+  })
+}
