@@ -10,11 +10,7 @@ import { GameRoom } from './server/gameroom'
 import dotenv from 'dotenv'
 
 dotenv.config()
-if (
-  process.env.SERVER_ADDRESS === undefined ||
-  process.env.SERVER_PORT === undefined
-)
-  throw new Error('.env not found')
+if (process.env.SERVER_ADDRESS === undefined || process.env.SERVER_PORT === undefined) throw new Error('.env not found')
 const ADDRESS = process.env.SERVER_ADDRESS
 const PORT = process.env.SERVER_PORT
 const ISDEV = process.env.NODE_ENV === 'development'
@@ -43,7 +39,7 @@ gameServer
   .then(() => {
     console.log(`Listening on ${ADDRESS}`)
   })
-  .catch((e) => {
+  .catch(e => {
     console.log(`Cannot listen.`, e)
   })
 

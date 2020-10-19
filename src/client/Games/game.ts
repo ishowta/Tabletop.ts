@@ -66,7 +66,7 @@ export abstract class Game {
    * @param components 配るコンポーネント
    */
   protected distribute(components: Component[]) {
-    let indexes = GetAll(this.room.state.players).map((p) => p.index)
+    let indexes = GetAll(this.room.state.players).map(p => p.index)
     const count = indexes.length
     let hands = _.chunk(components, Math.floor(components.length / count))
     if (hands.length > count) {

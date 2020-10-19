@@ -10,10 +10,8 @@ export class GameRoom extends Room<State> {
 
   onJoin(client: Client): void {
     // Make state
-    const indexList = Object.values<Player>(this.state.players).map(
-      (p) => p.index
-    )
-    let newIndex = _.range(0, 11).find((x) => !indexList.includes(x))
+    const indexList = Object.values<Player>(this.state.players).map(p => p.index)
+    let newIndex = _.range(0, 11).find(x => !indexList.includes(x))
     if (newIndex === undefined) newIndex = -1
     this.state.players[client.sessionId] = new Player(newIndex)
 
@@ -55,7 +53,5 @@ export class GameRoom extends Room<State> {
   }
 
   private formatPlayerStatus = (client: Client) =>
-    `id:${client.sessionId}, index:${
-      Get(this.state.players, client.sessionId).index
-    }`
+    `id:${client.sessionId}, index:${Get(this.state.players, client.sessionId).index}`
 }

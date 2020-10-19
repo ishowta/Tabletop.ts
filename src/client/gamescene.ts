@@ -92,7 +92,7 @@ export default class Tabletop extends Phaser.Scene {
             .setDepth(100)
         })
       })
-      .catch((e) => {
+      .catch(e => {
         console.log("Error: Can't join server.", e)
       })
   }
@@ -152,7 +152,7 @@ export default class Tabletop extends Phaser.Scene {
         this._ = _.runInContext()
 
         // Reset prev game
-        this.gameComponents.forEach((c) => {
+        this.gameComponents.forEach(c => {
           c.obj.removeAll()
           c.obj.destroy()
         })
