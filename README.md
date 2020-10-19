@@ -6,11 +6,11 @@ Tabletop simulator on the [Web](http://tabletop.temp-iwata.tokyo)
 
 ## Concept
 
-- コンポーネントと初期化処理だけで簡単にテーブルゲームが作れる
+- It can easily create a tabletop game with just the components and initialization process.
 
-  ↓ トランプゲームのコード ↓
+  ↓ Code of PlayingCard
 
-  ![トランプゲームのコード](code.png)
+  ![Code of PlayingCard](code.png)
 
 ## Architecture
 
@@ -20,6 +20,13 @@ Tabletop simulator on the [Web](http://tabletop.temp-iwata.tokyo)
   - コンポーネント群（`Components[]`）
 - ゲームは初期化時にリセットされ、イベント（`event.ts`）の送受信によって状態が共有される
 - ゲーム外の状態はColyseusによって共有される（`schema.ts`）
+
+## ToDo
+
+- [ ] 3D
+- [ ] Improve UI
+- [ ] Make it compatible with [Tabletop Simulator](https://store.steampowered.com/app/286160/Tabletop_Simulator/?l=japanese)
+- [ ] More Games!
 
 ## Structure
 
