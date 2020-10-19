@@ -4,16 +4,32 @@ import { Get, GetAll } from '../../schema'
 import { MASK_SHAPE_LIST } from '../../const'
 
 export abstract class Component {
-  protected game: Tabletop
+  protected scene: Tabletop
   obj: GameObjects.Container
   index: number | null
   canTouch: boolean
   private inPointerDown = false
-  constructor(game: Tabletop, width: number, height: number, x = 0, y = 0, index: number | null = -1, canTouch = true) {
+  constructor({
+    scene,
+    width,
+    height,
+    x = 0,
+    y = 0,
+    index = null,
+    canTouch = true,
+  }: {
+    scene: Tabletop
+    width: number
+    height: number
+    x?: number
+    y?: number
+    index?: number | null
+    canTouch?: boolean
+  }) {
     this.canTouch = canTouch
-    this.game = game
+    this.scene = scene
     this.index = index
-    this.obj = game.add.container(x, y)
+    this.obj = scene.add.container(x, y)
     this.obj.depth = 50
     this.obj.setSize(width, height)
     this.obj.setInteractive({ draggable: true })
@@ -22,12 +38,12 @@ export abstract class Component {
       if (this.index == null) throw new Error('Components index is not set.')
       this.inPointerDown = false
 
-      if (!this.checkTouchValidArea(game, pointer.x, pointer.y)) {
-        this.game.input.setDragState(pointer, 0)
+      if (!this.checkTouchValidArea(scene, pointer.x, pointer.y)) {
+        this.scene.input.setDragState(pointer, 0)
         return
       }
 
-      game.send({
+      scene.send({
         type: 'moveComponent',
         index: this.index,
         x: dragX,
@@ -42,8 +58,8 @@ export abstract class Component {
       this.inPointerDown = false
       if (!this.canTouch) return
       if (this.index == null) throw new Error('Components index is not set.')
-      if (!this.checkTouchValidArea(game, pointer.x, pointer.y)) return
-      game.send({
+      if (!this.checkTouchValidArea(scene, pointer.x, pointer.y)) return
+      scene.send({
         type: 'clickComponent',
         index: this.index,
       })

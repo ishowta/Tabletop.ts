@@ -14,7 +14,7 @@ export class PenguinParty extends Game {
     let cards = []
     for (let [color, num] of CARD_TYPE) {
       for (let i = 0; i < num; ++i) {
-        cards.push(new Card(this.scene, '', color))
+        cards.push(new Card({ scene: this.scene, color }))
       }
     }
     cards = this.scene._.shuffle(cards)
