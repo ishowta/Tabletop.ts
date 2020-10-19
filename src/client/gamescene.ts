@@ -12,7 +12,7 @@ import _, { LoDashStatic } from 'lodash'
 
 export default class Tabletop extends Phaser.Scene {
   name: string
-  room: Room<State> | null = null
+  room!: Room<State>
   gameComponents: Component[] = []
   cursors: Record<string, Phaser.GameObjects.Container | null> = {}
   mask: Record<string, Phaser.GameObjects.Container> = {}
