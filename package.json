@@ -17,6 +17,7 @@
     "colyseus": "=0.12.2",
     "colyseus.js": "=0.12.2",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "esbuild": "^0.7.16",
     "express": "^4.17.1",
     "lodash": "^4.17.20",

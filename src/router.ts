@@ -7,14 +7,21 @@ import { monitor } from '@colyseus/monitor'
 import watch from 'node-watch'
 import { exec } from 'child_process'
 import { GameRoom } from './server/gameroom'
+import dotenv from 'dotenv'
 
-if (process.env.SERVER_ADDRESS == null || process.env.SERVER_PORT == null)
-  throw new Error('env not set')
-const SERVER_ADDRESS = process.env.SERVER_ADDRESS
-const SERVER_PORT = process.env.SERVER_PORT
+dotenv.config()
+if (
+  process.env.SERVER_ADDRESS === undefined ||
+  process.env.SERVER_PORT === undefined
+)
+  throw new Error('.env not found')
+const ADDRESS = process.env.SERVER_ADDRESS
+const PORT = process.env.SERVER_PORT
 const ISDEV = process.env.NODE_ENV === 'development'
 const STATIC_PATH = '../static'
-const DEV_STATIC_BUILD_COMMAND = `yarn esbuild ./src/client/index.ts --bundle --platform=browser --define:SERVER_ADDRESS=\\"${SERVER_ADDRESS}\\" --outfile=./static/_dist_/dev.js`
+const STATIC_BUILD_COMMAND = `yarn esbuild ./src/client/index.ts --bundle --sourcemap --platform=browser --define:process.env=\\"${JSON.stringify(
+  dotenv.config().parsed
+)}\\" --outfile=./static/_dist_/dev.js`
 
 const app = express()
 app.use(cors())
@@ -32,16 +39,16 @@ gameServer.onShutdown(function () {
   console.log(`game server is going down.`)
 })
 gameServer
-  .listen(parseInt(SERVER_PORT))
+  .listen(parseInt(PORT))
   .then(() => {
-    console.log(`Listening on http://${SERVER_ADDRESS}`)
+    console.log(`Listening on ${ADDRESS}`)
   })
   .catch((e) => {
     console.log(`Cannot listen.`, e)
   })
 
 const build = () => {
-  exec(DEV_STATIC_BUILD_COMMAND, (error, _stdout, stderror) => {
+  exec(STATIC_BUILD_COMMAND, (error, _stdout, stderror) => {
     if (error != null) {
       console.log(`error: ${error.message}`)
       return

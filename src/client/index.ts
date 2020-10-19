@@ -19,7 +19,7 @@ export class TabletopTs extends Phaser.Game {
   public client: Colyseus.Client
   public constructor(conf: Phaser.Types.Core.GameConfig) {
     super(conf)
-    this.client = new Colyseus.Client(SERVER_ADDRESS)
+    this.client = new Colyseus.Client(process.env.SERVER_ADDRESS)
   }
 }
 
