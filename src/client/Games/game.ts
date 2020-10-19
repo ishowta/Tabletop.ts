@@ -36,13 +36,9 @@ export abstract class Game {
    * @param spot 並べる場所
    * @param components 並べるコンポーネントのリスト
    */
-  protected place(
-    spot: { type: 'hand'; index: number } | { type: 'board' },
-    components: Component[]
-  ) {
+  protected place(spot: { type: 'hand'; index: number } | { type: 'board' }, components: Component[]) {
     const margin = 5
-    let [spotX, spotY, spotWidth, spotHeight] =
-      spot.type === 'hand' ? MASK_SHAPE_LIST[spot.index] : BOARD_SHAPE
+    let [spotX, spotY, spotWidth, spotHeight] = spot.type === 'hand' ? MASK_SHAPE_LIST[spot.index] : BOARD_SHAPE
     spotX += margin
     spotY += margin
 
@@ -79,8 +75,7 @@ export abstract class Game {
       hands.pop()
     }
     _.zip(hands, indexes).forEach(([hand, index]) => {
-      if (hand !== undefined && index !== undefined)
-        this.place({ type: 'hand', index: index }, hand)
+      if (hand !== undefined && index !== undefined) this.place({ type: 'hand', index: index }, hand)
     })
   }
 }

@@ -126,9 +126,7 @@ export default class Tabletop extends Phaser.Scene {
               color: '#000000',
             }
           )
-          this.mask[message.id] = this.add
-            .container(x, y, [mask, userName])
-            .setDepth(75)
+          this.mask[message.id] = this.add.container(x, y, [mask, userName]).setDepth(75)
         }
         this.initFinished = true
         break
@@ -140,19 +138,12 @@ export default class Tabletop extends Phaser.Scene {
             fontSize: 50,
             color: '#000000',
           })
-          const curName = this.add.text(
-            50,
-            20,
-            Get(this.room.state.players, message.id).name,
-            {
-              fontFamily: 'Arial',
-              fontSize: 33,
-              color: '#000000',
-            }
-          )
-          this.cursors[message.id] = this.add
-            .container(0, 0, [cur, curName])
-            .setDepth(200)
+          const curName = this.add.text(50, 20, Get(this.room.state.players, message.id).name, {
+            fontFamily: 'Arial',
+            fontSize: 33,
+            color: '#000000',
+          })
+          this.cursors[message.id] = this.add.container(0, 0, [cur, curName]).setDepth(200)
         }
         this.cursors[message.id]?.setPosition(message.x - 25, message.y)
         break

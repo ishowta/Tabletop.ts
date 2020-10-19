@@ -1,6 +1,5 @@
 import { Component } from '../Components/component'
 import { Game } from './game'
-import _ from 'lodash'
 import { Card } from '../Components/card'
 
 export class PenguinParty extends Game {
@@ -12,9 +11,12 @@ export class PenguinParty extends Game {
       [0x614f9e, 7],
       [0x75c4ea, 7],
     ]
-    let cards = CARD_TYPE.flatMap(([color, num]) =>
-      _.range(0, num).map((_) => new Card(this.scene, '', color))
-    )
+    let cards = []
+    for (let [color, num] of CARD_TYPE) {
+      for (let i = 0; i < num; ++i) {
+        cards.push(new Card(this.scene, '', color))
+      }
+    }
     cards = this.scene._.shuffle(cards)
     this.distribute(cards)
     return cards
