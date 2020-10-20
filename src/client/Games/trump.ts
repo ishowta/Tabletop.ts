@@ -36,7 +36,7 @@ export class PlayingCard extends Game {
           text: `🃏`,
           color: 0xeeeeee,
           fontColor: '#000',
-          fontSize: 50,
+          fontSize: 60,
         })
     ),
   ]

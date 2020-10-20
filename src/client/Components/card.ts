@@ -5,9 +5,9 @@ import Tabletop from '../gamescene'
 export class Card extends Component {
   WIDTH = 50
   HEIGHT = 80
-  private base: GameObjects.Rectangle
   private text: GameObjects.Text
   private back: GameObjects.Rectangle
+  private static fontMetrics: Record<string, Phaser.Types.GameObjects.Text.TextMetrics> = {}
   constructor({
     scene,
     text = '',
@@ -16,11 +16,12 @@ export class Card extends Component {
     backColor = 0xcb904d,
     isReversed = false,
     fontColor = '#000000',
-    fontSize = 29,
+    fontSize = 27,
     x = 0,
     y = 0,
     index = null,
     canTouch = true,
+    fontFamily = 'Arial',
   }: {
     scene: Tabletop
     text?: string
@@ -34,17 +35,29 @@ export class Card extends Component {
     y?: number
     index?: number | null
     canTouch?: boolean
+    fontFamily?: string
   }) {
     super({ scene, width: 50, height: 80, x: x, y: y, index: index, canTouch: canTouch })
-    this.base = scene.add.rectangle(0, 0, this.WIDTH * scale, this.HEIGHT * scale, color)
-    this.text = scene.add.text(-23, -16, text, {
-      fontFamily: 'Arial',
+    const metricsKey = fontFamily + fontSize.toString()
+    if (Card.fontMetrics[metricsKey] === undefined) {
+      Card.fontMetrics[metricsKey] = scene.add
+        .text(0, 0, '🃏', {
+          fontFamily: fontFamily,
+          fontSize: fontSize,
+        })
+        .setVisible(false)
+        .getTextMetrics()
+    }
+    const base = scene.add.rectangle(0, 0, this.WIDTH * scale, this.HEIGHT * scale, color)
+    this.text = scene.add.text((-fontSize * text.length) / 4, -fontSize / 2, text, {
+      fontFamily: fontFamily,
       fontSize: fontSize,
       color: fontColor,
+      metrics: Card.fontMetrics[metricsKey],
     })
     this.back = scene.add.rectangle(0, 0, this.WIDTH * scale, this.HEIGHT * scale, backColor)
     this.back.visible = isReversed
-    this.obj.add([this.base, this.text, this.back])
+    this.obj.add([base, this.text, this.back])
   }
   /**
    * Flip
