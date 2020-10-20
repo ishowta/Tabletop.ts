@@ -7,7 +7,7 @@ import { State, Player, Get } from '../schema'
 import { GAME_LIST, GAME_TYPE_LIST } from './Games/gameList'
 import { Game } from './Games/game'
 import { TabletopTs } from '.'
-import { MASK_SHAPE_LIST, BOARD_SHAPE } from '../const'
+import { MASK_SHAPE_LIST, BOARD_SHAPE, WIDTH, HEIGHT } from '../const'
 import _, { LoDashStatic } from 'lodash'
 
 export default class Tabletop extends Phaser.Scene {
@@ -27,9 +27,17 @@ export default class Tabletop extends Phaser.Scene {
     document.body.style.cursor = 'none'
   }
 
-  preload(): void {}
+  preload(): void {
+    this.load.image('background', '../assets/board.png')
+  }
 
   create(): void {
+    const CELL = WIDTH / 6 / 6
+    this.add
+      .image(WIDTH / 6 - CELL * 2, (HEIGHT / 6) * 1 - CELL * 2, 'background')
+      .setOrigin(0, 0)
+      .setScale(1.5)
+
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     ;(this.game as TabletopTs).client
       .joinOrCreate<State>('game')
@@ -75,12 +83,14 @@ export default class Tabletop extends Phaser.Scene {
 
         // ゲームリストの生成
         GAME_TYPE_LIST.forEach((gameName, i) => {
+          this.add.rectangle(BOARD_SHAPE[0] + 50 + i * 150, BOARD_SHAPE[1], 130, 50, 0xeeeeee)
           this.add
-            .text(BOARD_SHAPE[0] + 50 + i * 200, BOARD_SHAPE[1], gameName, {
+            .text(BOARD_SHAPE[0] + 50 + i * 150, BOARD_SHAPE[1], gameName, {
               fontFamily: 'Arial',
               fill: '#000',
-              fontSize: 60,
+              fontSize: 30,
             })
+            .setOrigin(0.5, 0.5)
             .setInteractive()
             .on('pointerdown', () => {
               this.send({

@@ -1,5 +1,5 @@
-export const WIDTH = 1900
-export const HEIGHT = 1100
+export const WIDTH = 1600
+export const HEIGHT = 1200
 /** index番のプレイヤーの手札の位置 [x , y, 幅, 高さ] */
 export const MASK_SHAPE_LIST = [
   [(WIDTH / 6) * 0, (HEIGHT / 6) * 0, (WIDTH / 6) * 1, (HEIGHT / 6) * 2],
