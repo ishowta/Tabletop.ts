@@ -172,6 +172,11 @@ export default class Tabletop extends Phaser.Scene {
         this.gameComponents = game.init()
         break
       }
+      case 'pointerDownComponent': {
+        const maxDepth = _.maxBy(this.gameComponents, c => c.obj.depth)?.obj.depth
+        if (maxDepth != null) this.gameComponents[message.index].obj.depth = maxDepth + 0.0001
+        break
+      }
       case 'moveComponent':
         this.gameComponents[message.index].move(message.x, message.y)
         break
@@ -185,6 +190,7 @@ export default class Tabletop extends Phaser.Scene {
     // console.log('Send', message)
     switch (message.type) {
       case 'moveCursor':
+      case 'pointerDownComponent':
       case 'moveComponent':
         this.processingMessage(message)
         break

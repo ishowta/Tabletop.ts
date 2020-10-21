@@ -51,8 +51,16 @@ export abstract class Component {
         y: dragY,
       })
     })
-    this.obj.on('pointerdown', (_pointer: Phaser.Input.Pointer) => {
+    this.obj.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       this.inPointerDown = true
+      if (!this.canTouch) return
+      if (this.index == null) throw new Error('Components index is not set.')
+      scene.send({
+        type: 'pointerDownComponent',
+        index: this.index,
+        x: pointer.x,
+        y: pointer.y,
+      })
     })
     this.obj.on('pointerup', (pointer: Phaser.Input.Pointer) => {
       if (this.inPointerDown === false) return

@@ -43,6 +43,7 @@ export class GameRoom extends Room<State> {
     // Broadcast
     switch (message.type) {
       case 'moveCursor':
+      case 'pointerDownComponent':
       case 'moveComponent':
         // ※移動処理は応答性が重要でクライアントは自分自身の移動イベントはサーバーを介さずに実行しているため、Broadcastから除外する
         this.broadcast(message, { except: client })

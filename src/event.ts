@@ -5,5 +5,6 @@ export type Event =
   | { type: 'moveCursor'; id: string; x: number; y: number }
   | { type: 'initUser'; id: string; name: string; index: number }
   | { type: 'initGame'; game: GameType; seed: string | undefined }
+  | { type: 'pointerDownComponent'; index: number; x: number; y: number }
   | { type: 'moveComponent'; index: number; x: number; y: number }
   | { type: 'clickComponent'; index: number }
