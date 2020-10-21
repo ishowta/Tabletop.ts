@@ -36,7 +36,7 @@ export abstract class Game {
    * @param spot 並べる場所
    * @param components 並べるコンポーネントのリスト
    */
-  protected place(spot: { type: 'hand'; index: number } | { type: 'board' }, components: Component[]) {
+  protected place(spot: { type: 'hand'; index: number } | { type: 'board' }, components: (Component | Component[])[]) {
     const margin = 5
     let [spotX, spotY, spotWidth, spotHeight] =
       spot.type === 'hand' ? MASK_SHAPE_LIST[spot.index] : _.zipWith(BOARD_SHAPE, [0, 30, 0, 0], (a, b) => a + b)
@@ -48,18 +48,27 @@ export abstract class Game {
     let eachMaxHeight = 0
 
     for (const c of components) {
-      if (cur.x + c.obj.width > spotX + spotWidth) {
+      if (c instanceof Array && c.length === 0) continue
+      const width = c instanceof Array ? Math.max(...c.map(x => x.obj.width)) : c.obj.width
+      const height = c instanceof Array ? Math.max(...c.map(x => x.obj.height)) : c.obj.height
+      if (cur.x + width > spotX + spotWidth) {
         cur.x = spotX
         cur.y += eachMaxHeight + margin
       }
-      if (cur.y + c.obj.height > spotY + spotHeight) {
+      if (cur.y + height > spotY + spotHeight) {
         cur.x = spotX
         cur.y = spotY
         eachMaxHeight = 0
       }
-      eachMaxHeight = Math.max(eachMaxHeight, c.obj.height)
-      c.obj.setPosition(cur.x + c.obj.width / 2, cur.y + c.obj.height / 2)
-      cur.x += c.obj.width + margin
+      eachMaxHeight = Math.max(eachMaxHeight, height)
+      const cl = c instanceof Array ? c : [c]
+      let dep = cl[0].obj.depth
+      for (const comp of cl) {
+        comp.obj.setPosition(cur.x + comp.obj.width / 2, cur.y + comp.obj.height / 2)
+        comp.obj.depth = dep
+        dep += 0.0001
+      }
+      cur.x += width + margin
     }
   }
   /**

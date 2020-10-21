@@ -3,7 +3,7 @@ import Tabletop from '../gamescene'
 import { Get, GetAll } from '../../schema'
 import { MASK_SHAPE_LIST } from '../../const'
 
-export abstract class Component {
+export class Component {
   protected scene: Tabletop
   obj: GameObjects.Container
   index: number | null
@@ -108,5 +108,10 @@ export abstract class Component {
         .getTextMetrics()
     }
     return Component.fontMetrics[metricsKey]
+  }
+  public static Build(scene: Tabletop, shape: GameObjects.GameObject & GameObjects.Components.ComputedSize): Component {
+    const comp = new Component({ scene, width: shape.width, height: shape.height })
+    comp.obj.add(shape)
+    return comp
   }
 }
