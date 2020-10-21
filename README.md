@@ -28,6 +28,10 @@ Tabletop simulator on the [Web](http://tabletop.temp-iwata.tokyo)
 - [ ] Make it compatible with [Tabletop Simulator](https://store.steampowered.com/app/286160/Tabletop_Simulator/?l=japanese)
 - [ ] Matching room
 
+## 作って分かったこと
+- マウスだと操作性に限界がありそう
+- 地味なUIと使いづらいUXだと楽しさが半減する
+
 ## Structure
 
 ```txt
