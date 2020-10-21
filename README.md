@@ -27,7 +27,6 @@ Tabletop simulator on the [Web](http://tabletop.temp-iwata.tokyo)
 - [ ] Improve UI
 - [ ] Make it compatible with [Tabletop Simulator](https://store.steampowered.com/app/286160/Tabletop_Simulator/?l=japanese)
 - [ ] Matching room
-- [ ] More Games!
 
 ## Structure
 
