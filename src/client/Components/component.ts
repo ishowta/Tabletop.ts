@@ -9,6 +9,7 @@ export abstract class Component {
   index: number | null
   canTouch: boolean
   private inPointerDown = false
+  private static fontMetrics: Record<string, Phaser.Types.GameObjects.Text.TextMetrics> = {}
   constructor({
     scene,
     width,
@@ -86,5 +87,18 @@ export abstract class Component {
       }
     }
     return true
+  }
+  protected getFontMetrics(fontFamily: string, fontSize: number) {
+    const metricsKey = fontFamily + fontSize.toString()
+    if (Component.fontMetrics[metricsKey] === undefined) {
+      Component.fontMetrics[metricsKey] = this.scene.add
+        .text(0, 0, '', {
+          fontFamily: fontFamily,
+          fontSize: fontSize,
+        })
+        .setVisible(false)
+        .getTextMetrics()
+    }
+    return Component.fontMetrics[metricsKey]
   }
 }

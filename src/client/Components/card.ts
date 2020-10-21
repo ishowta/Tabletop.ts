@@ -3,11 +3,10 @@ import { Component } from './component'
 import Tabletop from '../gamescene'
 
 export class Card extends Component {
-  WIDTH = 50
-  HEIGHT = 80
+  static WIDTH = 50
+  static HEIGHT = 80
   private text: GameObjects.Text
   private back: GameObjects.Rectangle
-  private static fontMetrics: Record<string, Phaser.Types.GameObjects.Text.TextMetrics> = {}
   constructor({
     scene,
     text = '',
@@ -37,25 +36,23 @@ export class Card extends Component {
     canTouch?: boolean
     fontFamily?: string
   }) {
-    super({ scene, width: 50, height: 80, x: x, y: y, index: index, canTouch: canTouch })
-    const metricsKey = fontFamily + fontSize.toString()
-    if (Card.fontMetrics[metricsKey] === undefined) {
-      Card.fontMetrics[metricsKey] = scene.add
-        .text(0, 0, '🃏', {
-          fontFamily: fontFamily,
-          fontSize: fontSize,
-        })
-        .setVisible(false)
-        .getTextMetrics()
-    }
-    const base = scene.add.rectangle(0, 0, this.WIDTH * scale, this.HEIGHT * scale, color)
+    super({
+      scene,
+      width: Card.WIDTH * scale,
+      height: Card.HEIGHT * scale,
+      x: x,
+      y: y,
+      index: index,
+      canTouch: canTouch,
+    })
+    const base = scene.add.rectangle(0, 0, Card.WIDTH * scale, Card.HEIGHT * scale, color)
     this.text = scene.add.text((-fontSize * text.length) / 4, -fontSize / 2, text, {
       fontFamily: fontFamily,
       fontSize: fontSize,
       color: fontColor,
-      metrics: Card.fontMetrics[metricsKey],
+      metrics: this.getFontMetrics(fontFamily, fontSize),
     })
-    this.back = scene.add.rectangle(0, 0, this.WIDTH * scale, this.HEIGHT * scale, backColor)
+    this.back = scene.add.rectangle(0, 0, Card.WIDTH * scale, Card.HEIGHT * scale, backColor)
     this.back.visible = isReversed
     this.obj.add([base, this.text, this.back])
   }

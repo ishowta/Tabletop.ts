@@ -38,7 +38,8 @@ export abstract class Game {
    */
   protected place(spot: { type: 'hand'; index: number } | { type: 'board' }, components: Component[]) {
     const margin = 5
-    let [spotX, spotY, spotWidth, spotHeight] = spot.type === 'hand' ? MASK_SHAPE_LIST[spot.index] : BOARD_SHAPE
+    let [spotX, spotY, spotWidth, spotHeight] =
+      spot.type === 'hand' ? MASK_SHAPE_LIST[spot.index] : _.zipWith(BOARD_SHAPE, [0, 30, 0, 0], (a, b) => a + b)
     spotX += margin
     spotY += margin
 

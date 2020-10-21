@@ -58,7 +58,7 @@ const build = () => {
 build()
 if (ISDEV) {
   // Hot reload
-  watch('./src/client', { recursive: true }, function (_evt, _name) {
+  watch('./src', { recursive: true }, function (_evt, _name) {
     console.log(`${_name != null ? _name : ''} changed.`)
     build()
   })
