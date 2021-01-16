@@ -1,6 +1,6 @@
 # Tabletop.ts
 
-Tabletop simulator on the [Web](http://tabletop.temp-iwata.tokyo)
+Tabletop simulator on the [Web](https://tabletop.iwata.love/)
 
 ![スクリーンショット](screenshot.png)
 
