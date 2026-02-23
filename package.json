@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "export NODE_ENV=development && ts-node-dev --respawn ./src/router.ts",
-    "start:prod": "export NODE_ENV=production && ts-node ./src/router.ts",
+    "build": "tsc",
+    "start:prod": "export NODE_ENV=production && node ./dist/router.js",
     "lint": "eslint './src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix"
   },
